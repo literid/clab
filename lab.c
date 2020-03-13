@@ -27,9 +27,9 @@ Vector* vscan(type tp) {
     	double img,real;
 
     	for (int i = 0; i < size; ++i) {
-    		printf("\nreal part");
+    		printf("\nreal part ");
     		scanf("%le",&real);
-    		printf("image part");
+    		printf("image part ");
     		scanf("%le",&img);
     		complex z = CMPLX(real,img);
     		vset_elem(vptr,i,&z);
@@ -68,26 +68,39 @@ void ui () {
 			"11. exit\n"
 		);
 
-		int iscr,cscr;
+		int* iscr;
+		complex* cscr;
 		scanf("%d", &choice); 
 		
 		switch(choice) {
 			case 1:
+				if (varr[0] != NULL) {
+					free(varr[0]);
+				}
 				varr[0] = vscan(INT);
 				printf("vector1 = ");
 				vprint(varr[0]);
 				break;
 			case 2:
+				if (varr[1] != NULL) {
+					free(varr[1]);
+				}
 				varr[1] = vscan(INT);
 				printf("vector2 = ");
 				vprint(varr[1]);
 				break;
 			case 3:
+				if (varr[2] != NULL) {
+					free(varr[2]);
+				}			
 				varr[2] = vscan(COMPLEX);
 				printf("vector3 = ");
 				vprint(varr[2]);
 				break;
 			case 4:
+				if (varr[3] != NULL) {
+					free(varr[3]);
+				}			
 				varr[3] = vscan(COMPLEX);
 				printf("vector4 = ");
 				vprint(varr[3]);
@@ -98,6 +111,11 @@ void ui () {
 					printf("error: null vector\n");
 					exit(1);
 				}
+
+				if (varr[4] != NULL) {
+					free(varr[4]);
+				}
+
 				varr[4] = vadd(varr[0], varr[1]);
 				printf("vector5 = ");
 				vprint(varr[4]);
@@ -108,6 +126,11 @@ void ui () {
 					printf("error: null vector\n");
 					exit(1);
 				}
+
+				if (varr[5] != NULL) {
+					free(varr[5]);
+				}
+
 				varr[5] = vadd(varr[2], varr[3]);
 				printf("vector6 = ");
 				vprint(varr[5]);
@@ -118,17 +141,21 @@ void ui () {
 					printf("error: null vector\n");
 					exit(1);
 				}
-				iscr = *(int*)vscal_mult(varr[0], varr[1]);
-				printf("%d\n",iscr);
+
+				iscr = (int*)vscal_mult(varr[0], varr[1]);
+				printf("%d\n",*iscr);
+				free(iscr);
 				break;
 			case 8:
-				if ((varr[0] == NULL) || (varr[1] == NULL)) {
+				if ((varr[2] == NULL) || (varr[3] == NULL)) {
 					clean();
 					printf("error: null vector\n");
 					exit(1);
 				}
-				cscr = *(complex*)vscal_mult(varr[2], varr[3]);
-				printf("%d\n",cscr);
+				
+				cscr = (complex*)vscal_mult(varr[2], varr[3]);
+				printf("%g %+gi\n",creal(*cscr),cimag(*cscr));
+				free(cscr);
 				break;
 			case 9:
 				printf("enter the number of vector\n");
@@ -136,6 +163,7 @@ void ui () {
 				scanf("%d",&num1);
 
 				if ((num1 < 1) && (num1 > 6)) {
+					clean();					
 					exit(1);
 				}
 
@@ -157,12 +185,13 @@ void ui () {
 				}
 				break;	
 			case 10:
-				printf("enter the number of vector to delete");
+				printf("enter the number of vector to delete ");
 				int num;
 				scanf("%d",&num);
 
 				if ((num >= 1) && (num <= 6) && (varr[num-1] != NULL)) {
 					vfree(varr[num-1]);
+					varr[num-1] = NULL;
 				} else {
 					clean();
 					printf("error: null vector\n");
@@ -170,8 +199,10 @@ void ui () {
 				}
 				break;	
 			case 11:
+				clean();
 				return;
 			default:
+				clean();
 				exit(1);
 				break;		
 		}

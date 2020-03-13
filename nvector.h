@@ -47,7 +47,7 @@ Vector* vcreate(type str_type,int count) {
 
 void* vget_elem(Vector* vec,int index) {
 	
-	if ((index < 0) || (index > vec->count)) {
+	if ((index < 0) || (index >= vec->count)) {
 		printf("error: index out of range\n");
 		exit(1);
 	}
